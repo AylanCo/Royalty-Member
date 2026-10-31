@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royalty Club - Cafe & Lounge</title>
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0a0a0c;
+            --bg-card: #121318;
+            --gold-primary: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-dark: #aa7c11;
+            --metallic-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa7c11 100%);
+            --metallic-silver: linear-gradient(135deg, #e0e0e0 0%, #ffffff 25%, #a8a8a8 50%, #f5f5f5 75%, #8a8a8a 100%);
+            --text-main: #f0f0f5;
+            --text-muted: #8a8b98;
+            --border-color: rgba(212, 175, 55, 0.2);
+            --danger: #e74c3c;
+            --success: #2ecc71;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(170, 124, 17, 0.05) 0%, transparent 40%);
+        }
+
+        .hidden { display: none !important; }
+        .text-gold { color: var(--gold-primary); }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+
+        /* BUTTONS */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+        }
+
+        .btn-gold {
+            background: var(--metallic-gradient);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold-light);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-danger:hover { background: #c0392b; }
+
+        /* INPUTS */
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .input-control {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-control:focus {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* LOGIN CONTAINER */
+        #login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header i {
+            font-size: 2.5rem;
+            color: var(--gold-primary);
+            margin-bottom: 10px;
+        }
+
+        .login-header h2 {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        /* HIDDEN CASHIER BUTTON */
+        .hidden-cashier-trigger {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 999;
+            opacity: 0.05;
+            transition: all 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-primary);
+        }
+
+        .hidden-cashier-trigger:hover {
+            opacity: 0.8;
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            transform: scale(1.1);
+        }
+
+        /* 3D ROYALTY CARD STYLES */
+        .card-perspective {
+            perspective: 1000px;
+            margin: 20px 0 30px 0;
+        }
+
+        .royalty-card-3d {
+            width: 100%;
+            height: 220px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #1f1c18 0%, #000000 50%, #2c2416 100%);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 175, 55, 0.15);
+            position: relative;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .royalty-card-3d::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 45%,
+                rgba(255, 255, 255, 0.08) 50%,
+                transparent 55%
+            );
+            transform: rotate(30deg);
+            transition: all 0.6s;
+            pointer-events: none;
+        }
+
+        .royalty-card-3d:hover::before {
+            left: 100%;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transform: translateZ(30px);
+        }
+
+        .card-brand {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            background: var(--metallic-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-chip {
+            width: 40px;
+            height: 30px;
+            background: linear-gradient(135deg, #e6c875 0%, #99752b 100%);
+            border-radius: 6px;
+            position: relative;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .card-chip::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .card-body-3d {
+            transform: translateZ(40px);
+        }
+
+        .card-number {
+            font-family: monospace;
+            font-size: 1.25rem;
+            letter-spacing: 3px;
+            color: #e0e0e0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 5px;
+        }
+
+        .card-tier {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold-primary);
+        }
+
+        .card-footer-3d {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            transform: translateZ(25px);
+        }
+
+        .card-holder-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .card-holder-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .card-points-badge {
+            text-align: right;
+            background: rgba(212, 175, 55, 0.15);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .card-points-badge span {
+            display: block;
+            font-size: 0.65rem;
+            color: var(--gold-light);
+        }
+
+        .card-points-badge strong {
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        /* MEMBER DASHBOARD */
+        .navbar {
+            background: rgba(18, 19, 24, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--gold-light);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 12px;
+        }
+
+        /* REDEEM ITEMS GRID */
+        .redeem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .redeem-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .redeem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-primary);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.15);
+        }
+
+        .redeem-img {
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .redeem-body {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .redeem-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .redeem-pts {
+            color: var(--gold-primary);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        /* CASHIER DASHBOARD & TABLES */
+        .cashier-nav {
+            background: linear-gradient(90deg, #151821 0%, #0d0e12 100%);
+            border-bottom: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .badge-cashier {
+            background: var(--danger);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .tab-menu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .custom-table th {
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--gold-light);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        .custom-table td {
+            padding: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        .custom-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .close-modal:hover { color: #fff; }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== 1. LOGIN MEMBER ==================== -->
+    <section id="login-page">
+        <div class="login-box">
+            <div class="login-header">
+                <i class="fa-solid fa-crown"></i>
+                <h2 class="font-cinzel">ROYALTY MEMBER</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 5px;">Nikmati Layanan Eksklusif Cafe Kami</p>
+            </div>
+
+            <!-- Preview Card 3D Mini -->
+            <div class="card-perspective">
+                <div class="royalty-card-3d" id="loginCard3d">
+                    <div class="card-header">
+                        <span class="card-brand"><i class="fa-solid fa-gem"></i> ROYALTY</span>
+                        <div class="card-chip"></div>
+                    </div>
+                    <div class="card-body-3d">
+                        <div class="card-number">•••• •••• •••• 8888</div>
+                        <div class="card-tier">VIP MEMBER CARD</div>
+                    </div>
+                    <div class="card-footer-3d">
+                        <div>
+                            <div class="card-holder-label">MEMBER NAME</div>
+                            <div class="card-holder-name">YOUR NAME</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="form-login-member">
+                <div class="input-group">
+                    <label><i class="fa-solid fa-id-card"></i> ID MEMBER</label>
+                    <input type="text" id="member-id" class="input-control" placeholder="Contoh: MB-1001" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fa-solid fa-key"></i> PIN / PASSWORD</label>
+                    <input type="password" id="member-pass" class="input-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-gold" style="width: 100%; margin-top: 10px;">
+                    <i class="fa-solid fa-right-to-bracket"></i> MASUK SEKARANG
+                </button>
+            </form>
+        </div>
+
+        <!-- TOMBOL KASIR TERSEMBUNYI -->
+        <div class="hidden-cashier-trigger" onclick="openCashierAuthModal()" title="System Control">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+    </section>
+
+    <!-- ==================== 2. MEMBER DASHBOARD ==================== -->
+    <div id="member-dashboard" class="hidden">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fa-solid fa-crown text-gold"></i>
+                <span class="font-cinzel text-gold">ROYALTY CLUB</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="logout()">
+                <i class="fa-solid fa-power-off"></i> Keluar
+            </button>
+        </nav>
+
+        <div class="main-container">
+            <div class="dashboard-grid">
+                <!-- Sisi Kiri: Visual Card 3D -->
+                <div>
+                    <div class="card-perspective">
+                        <div class="royalty-card-3d" id="dashboardCard3d">
+                            <div class="card-header">
+                                <span class="card-brand"><i class="fa-solid fa-gem"></i> ROYALTY</span>
+                                <div class="card-chip"></div>
+                            </div>
+                            <div class="card-body-3d">
+                                <div class="card-number" id="m-card-number">MB-1001</div>
+                                <div class="card-tier" id="m-card-tier">GOLD PRIVILEGE</div>
+                            </div>
+                            <div class="card-footer-3d">
+                                <div>
+                                    <div class="card-holder-label">MEMBER NAME</div>
+                                    <div class="card-holder-name" id="m-card-name">Alexander Pierce</div>
+                                </div>
+                                <div class="card-points-badge">
+                                    <span>TOTAL POIN</span>
+                                    <strong id="m-card-points">1,250 PTS</strw
